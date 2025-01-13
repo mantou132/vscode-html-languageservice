@@ -238,6 +238,10 @@ export class HTMLCompletion {
 							};
 						}
 					}
+					// template attribute, `.attr` / `@attr` / `?attr`
+					if (attr.name.charCodeAt(0) < 65) {
+						codeSnippet = attr.name + '=${$1}'
+					}
 
 					result.items.push({
 						label: attr.name,
@@ -249,7 +253,11 @@ export class HTMLCompletion {
 					});
 				});
 			});
-			collectDataAttributesSuggestions(range, seenAttributes);
+			// range should include value
+			// hack fix
+			if (text[nameEnd] !== '=') {
+				collectDataAttributesSuggestions(range, seenAttributes);
+			}
 			return result;
 		}
 
