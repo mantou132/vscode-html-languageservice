@@ -513,7 +513,7 @@ export class HTMLCompletion {
 		}
 		const value = defaultValue === 'doublequotes' ? '"$1"' : '\'$1\'';
 		const node = htmlDocument.findNodeBefore(offset);
-		if (node && node.attributes && node.start < offset && (!node.endTagStart || node.endTagStart > offset)) {
+		if (node && node.attributesMap.size && node.start < offset && (!node.endTagStart || node.endTagStart > offset)) {
 			const scanner = createScanner(document.getText(), node.start);
 			let token = scanner.scan();
 			while (token !== TokenType.EOS && scanner.getTokenEnd() <= offset) {

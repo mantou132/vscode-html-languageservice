@@ -62,17 +62,15 @@ function provideFileSymbolsInternal(document: TextDocument, node: Node, symbols:
 function nodeToName(node: Node): string {
 	let name = node.tag;
 
-	if (node.attributes) {
-		const id = node.attributes['id'];
-		const classes = node.attributes['class'];
+	const id = node.attributesMap.get('id')?.value;
+	const classes = node.attributesMap.get('class')?.value;
 
-		if (id) {
-			name += `#${id.replace(/[\"\']/g, '')}`;
-		}
+	if (id) {
+		name += `#${id.replace(/[\"\']/g, '')}`;
+	}
 
-		if (classes) {
-			name += classes.replace(/[\"\']/g, '').split(/\s+/).map(className => `.${className}`).join('');
-		}
+	if (classes) {
+		name += classes.replace(/[\"\']/g, '').split(/\s+/).map(className => `.${className}`).join('');
 	}
 
 	return name || '?';

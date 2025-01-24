@@ -68,7 +68,7 @@ export interface Node {
 	endTagStart: number | undefined;
 	children: Node[];
 	parent?: Node;
-	attributes?: { [name: string]: string | null } | undefined;
+	attributesMap: Map<string, { value: string | null, start: number; end: number }>;
 }
 
 export enum TokenType {

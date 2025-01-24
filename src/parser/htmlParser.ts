@@ -13,8 +13,8 @@ export class Node {
 	public closed: boolean = false;
 	public startTagEnd: number | undefined;
 	public endTagStart: number | undefined;
-	public attributes: { [name: string]: string | null } | undefined;
-	public get attributeNames(): string[] { return this.attributes ? Object.keys(this.attributes) : []; }
+	public attributesMap = new Map<string, { value: string | null; start: number, end: number }>();
+	public get attributeNames(): string[] { return [ ...this.attributesMap.keys() ] }
 	constructor(public start: number, public end: number, public children: Node[], public parent?: Node) {
 	}
 	public isSameTag(tagInLowerCase: string | undefined) {
@@ -141,18 +141,15 @@ export class HTMLParser {
           break;
         case TokenType.AttributeName: {
           pendingAttribute = scanner.getTokenText();
-          let attributes = curr.attributes;
-          if (!attributes) {
-            curr.attributes = attributes = {};
-          }
-          attributes[pendingAttribute] = null; // Support valueless attributes such as 'checked'
+          let attributesMap = curr.attributesMap;
+          attributesMap.set(pendingAttribute, { value: null, start: scanner.getTokenOffset(), end: scanner.getTokenEnd() })
           break;
         }
         case TokenType.AttributeValue: {
           const value = scanner.getTokenText();
-          const attributes = curr.attributes;
-          if (attributes && pendingAttribute) {
-            attributes[pendingAttribute] = value;
+          const info = pendingAttribute && curr.attributesMap.get(pendingAttribute);
+          if (info) {
+            info.value = value;
             pendingAttribute = null;
           }
           break;

@@ -17,7 +17,7 @@ suite('HTML Parser', () => {
 	}
 
 	function toJSONWithAttributes(node: Node): any {
-		return { tag: node.tag, attributes: node.attributes, children: node.children.map(toJSONWithAttributes) };
+		return { tag: node.tag, attributes: [...node.attributesMap.entries()], children: node.children.map(toJSONWithAttributes) };
 	}
 
 	function assertDocument(input: string, expected: any) {
@@ -104,15 +104,36 @@ suite('HTML Parser', () => {
 		const str = '<div class="these are my-classes" id="test"><span aria-describedby="test"></span></div>';
 		assertAttributes(str, [{
 			tag: 'div',
-			attributes: {
-				class: '"these are my-classes"',
-				id: '"test"'
-			},
+			attributes: [
+				[
+					'class',
+					{
+						end: 10,
+						start: 5,
+						value: '"these are my-classes"'
+					}
+				],
+				[
+					'id',
+					{
+						end: 36,
+						start: 34,
+						value: '"test"'
+					}
+				]
+			],
 			children: [{
 				tag: 'span',
-				attributes: {
-					'aria-describedby': '"test"'
-				},
+				attributes: [
+          [
+            'aria-describedby',
+            {
+              end: 66,
+              start: 50,
+              value: '"test"'
+            }
+          ]
+        ],
 				children: []
 			}]
 		}]);
@@ -122,10 +143,24 @@ suite('HTML Parser', () => {
 		const str = '<div checked id="test"></div>';
 		assertAttributes(str, [{
 			tag: 'div',
-			attributes: {
-				checked: null,
-				id: '"test"'
-			},
+			attributes: [
+				[
+					'checked',
+					{
+						end: 12,
+						start: 5,
+						value: null
+					}
+				],
+				[
+					'id',
+					{
+						end: 15,
+						start: 13,
+						value: '"test"'
+					}
+				]
+			],
 			children: []
 		}]);
 	});
