@@ -239,7 +239,7 @@ export class HTMLCompletion {
 						}
 					}
 					// template attribute, `.attr` / `@attr` / `?attr`
-					if (attr.name.charCodeAt(0) < 65) {
+					if (attr.valueSet !== 'v' && attr.name.startsWith('v-') || attr.name.charCodeAt(0) < 65) {
 						codeSnippet = attr.name + '=${$1}'
 					}
 

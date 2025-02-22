@@ -1,6 +1,6 @@
 {
   "name": "@mantou/vscode-html-languageservice",
-  "version": "5.3.4",
+  "version": "5.3.6",
   "description": "Language service for HTML",
   "main": "./lib/umd/htmlLanguageService.js",
   "typings": "./lib/umd/htmlLanguageService",
